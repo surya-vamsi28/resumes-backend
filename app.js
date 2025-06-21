@@ -25,7 +25,8 @@ app.use(
     credentials: true, // Optional: enable if using cookies or authorization headers
   })
 );
-
+// ✅ This line is essential to handle preflight
+app.options("*", cors());
 app.use(express.json());
 
 app.use("/api", authRoutes);
