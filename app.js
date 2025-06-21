@@ -11,22 +11,21 @@ const allowedOrigins = [
   "http://another-frontend.local",
 ];
 
+// --- CORS middleware ---
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
       }
+      return callback(new Error("Not allowed by CORS"));
     },
-    credentials: true, // Optional: enable if using cookies or authorization headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
   })
 );
-// ✅ This line is essential to handle preflight
+
+// ✅ MUST be before routes: handle preflight OPTIONS for all routes
 app.options("*", cors());
 app.use(express.json());
 
