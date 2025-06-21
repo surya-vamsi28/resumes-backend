@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const authRoutes = require("./routes/authRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
+const cors = require("cors");
 
 // Define the list of allowed origins
 const allowedOrigins = [
