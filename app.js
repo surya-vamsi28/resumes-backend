@@ -3,6 +3,29 @@ const app = express();
 const authRoutes = require("./routes/authRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 
+// Define the list of allowed origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://your-production-frontend.com",
+  "http://another-frontend.local",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Optional: enable if using cookies or authorization headers
+  })
+);
+
 app.use(express.json());
 
 app.use("/api", authRoutes);
